@@ -11,16 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Display PR Title
+        run: |
+          PR_TITLE=$(jq --raw-output .pull_request.title "$GITHUB_EVENT_PATH")
+          echo "PR Title: $PR_TITLE"
+
       - name: Check for skip keyword
         run: |
           PR_TITLE=$(jq --raw-output .pull_request.title "$GITHUB_EVENT_PATH")
           if [[ "$PR_TITLE" == *"TAKO"* ]]; then
-            echo "Skipping CI for pull request with "TAKO" keyword."
-            exit 78  # たこ殴るときはこっち
+            echo "Skipping CI for pull request with 'TAKO' keyword."
+            exit 78
           fi
 
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Display Directory Contents
+        run: |
+          echo "Directory Contents:"
+          ls -R
 
       - name: Install dependencies (Go)
         if: ${{ contains(github.event_name, 'pull_request') && contains(github.event_path, 'go.mod') }}
@@ -40,7 +50,10 @@ jobs:
 
       - name: Lint code (Go)
         if: ${{ contains(github.event_name, 'pull_request') && contains(github.event_path, 'go.mod') }}
-        run: go fmt ./... && go vet ./...
+        run: |
+          echo "Linting code (Go) - Start"
+          go fmt ./... && go vet ./...
+          echo "Linting code (Go) - End"
 
       - name: Lint code (Python)
         if: ${{ contains(github.event_name, 'pull_request') && contains(github.event_path, 'requirements.txt') }}
@@ -61,6 +74,8 @@ jobs:
           API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments"
           TOKEN=${{ secrets.GITHUB_TOKEN }}
 
+          echo "Congratulations! Linting passed. 🐈🎉"
           curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" $API_URL -d '{"body":"Congratulations! Linting passed. 🐈🎉"}'
 
+          echo "Closing Pull Request..."
           curl -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/$PR_NUMBER" -d '{"state":"closed"}'
