@@ -1,3 +1,7 @@
-fmt.Println("ﾋﾟｷﾞﾓﾝｺﾞ")
+package main
 
-//fixed
+import "fmt"
+
+func main () {
+    fmt.Println("ﾋﾟｷﾞﾓﾝｺﾞ")
+}
