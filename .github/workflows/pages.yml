@@ -14,8 +14,8 @@ jobs:
       - name: Check for skip keyword
         run: |
           PR_TITLE=$(jq --raw-output .pull_request.title "$GITHUB_EVENT_PATH")
-          if [[ "$PR_TITLE" == *"🐙✊"* ]]; then
-            echo "Skipping CI for pull request with '🐙✊' keyword."
+          if [[ "$PR_TITLE" == *"TAKO"* ]]; then
+            echo "Skipping CI for pull request with "TAKO" keyword."
             exit 78  # たこ殴るときはこっち
           fi
 
