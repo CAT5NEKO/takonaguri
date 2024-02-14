@@ -15,8 +15,8 @@ jobs:
         run: |
           PR_TITLE=$(jq --raw-output .pull_request.title "$GITHUB_EVENT_PATH")
           if [[ "$PR_TITLE" == *"🐙✊"* ]]; then
-            echo "Skipping CI for pull request with 'TAKONAGURANAI' keyword."
-            exit 78  # Exit with a neutral status code to skip the workflow
+            echo "Skipping CI for pull request with '🐙✊' keyword."
+            exit 78  # たこ殴るときはこっち
           fi
 
       - name: Checkout code
