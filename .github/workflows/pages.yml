@@ -14,7 +14,7 @@ jobs:
       - name: Check for skip keyword
         run: |
           PR_TITLE=$(jq --raw-output .pull_request.title "$GITHUB_EVENT_PATH")
-          if [[ "$PR_TITLE" == *"TAKONAGURANAI"* ]]; then
+          if [[ "$PR_TITLE" == *"🐙✊"* ]]; then
             echo "Skipping CI for pull request with 'TAKONAGURANAI' keyword."
             exit 78  # Exit with a neutral status code to skip the workflow
           fi
