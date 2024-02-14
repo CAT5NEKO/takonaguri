@@ -1,1 +1,3 @@
 fmt.Println("ﾋﾟｷﾞﾓﾝｺﾞ")
+
+//fixed
